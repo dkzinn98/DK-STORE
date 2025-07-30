@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: dk_store_db
+    restart: always
+    environment:
+      POSTGRES_DB: dk_store
+      POSTGRES_USER: dk_admin
+      POSTGRES_PASSWORD: dk123456
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./DATABASE/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - dk_store_network
+
+  # PgAdmin (Interface gráfica para PostgreSQL)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: dk_store_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@dkstore.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - dk_store_network
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  dk_store_network:
+    driver: bridge
