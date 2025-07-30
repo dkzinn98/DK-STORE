@@ -4,6 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 const { testConnection } = require('./src/config/database');
+const categoriesRoutes = require('./src/routes/categories');
+
 
 require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
 const app = express(); // Cria instância do Express e inicia o servidor
@@ -25,6 +27,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Para lidar co
 
 // === SERVIR ARQUIVOS ESTÁTICOS (UPLOADS) === \\
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// ===== ROTAS DA API ===== \\
+app.use('/api/categories', categoriesRoutes);
 
 // === ROTA DE TESTE === \\
 app.get('/', (req, res) => {
