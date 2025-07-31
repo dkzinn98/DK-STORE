@@ -4,8 +4,11 @@ const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 const { testConnection } = require('./src/config/database');
-const categoriesRoutes = require('./src/routes/categories');
 
+const categoriesRoutes = require('./src/routes/categories');
+const usersRoutes = require('./src/routes/users');
+const productsRoutes = require('./src/routes/products');
+const uploadsRoutes = require('./src/routes/uploads');
 
 require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
 const app = express(); // Cria instância do Express e inicia o servidor
@@ -22,14 +25,17 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json({ limit: '10mb'})); // Para lidar com JSON no corpo das requisições
-app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Para lidar com formulários
+app.use(express.json({ limit: '50mb'})); // Para lidar com JSON no corpo das requisições
+app.use(express.urlencoded({ extended: true, limit: '50mb' })); // Para lidar com formulários
 
 // === SERVIR ARQUIVOS ESTÁTICOS (UPLOADS) === \\
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ===== ROTAS DA API ===== \\
 app.use('/api/categories', categoriesRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/uploads', uploadsRoutes);
 
 // === ROTA DE TESTE === \\
 app.get('/', (req, res) => {
@@ -38,9 +44,10 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     status: 'ONLINE',
     endpoints: {
-      products: '/api/products',
       categories: '/api/categories',
       users: '/api/users',
+      products: '/api/products',
+      uploads: '/api/uploads',
       orders: '/api/orders'
     }
   });
