@@ -9,6 +9,7 @@ const categoriesRoutes = require('./src/routes/categories');
 const usersRoutes = require('./src/routes/users');
 const productsRoutes = require('./src/routes/products');
 const uploadsRoutes = require('./src/routes/uploads');
+const ordersRoutes = require('./src/routes/orders');
 
 require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
 const app = express(); // Cria instância do Express e inicia o servidor
@@ -36,6 +37,7 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/uploads', uploadsRoutes);
+app.use('/api/orders', ordersRoutes);
 
 // === ROTA DE TESTE === \\
 app.get('/', (req, res) => {
